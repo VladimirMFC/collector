@@ -5,7 +5,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = clc
 TEMPLATE = app
 
-SOURCES += main.cpp\
-	mainwindow.cpp
+SOURCES += src/main.cpp\
+	src/mainwindow.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += src/mainwindow.h

@@ -1,11 +1,11 @@
 build:	config
 	cd server && make build
+	cd client && make build
 
 config:
 	cd server && make config
+	cd client && make config
 
 clean:
 	cd server && make clean
-
-run:	build
-	cd server && make run
+	cd client && make clean

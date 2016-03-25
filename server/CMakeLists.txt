@@ -17,7 +17,7 @@ find_package(Threads REQUIRED)
 find_package(PostgreSQL REQUIRED)
 
 set(TARGET_NAME "cld")
-set(EXECUTABLE_OUTPUT_PATH ../bin)
+#set(EXECUTABLE_OUTPUT_PATH ../bin)
 
 aux_source_directory(./src SRC_LIST)
 add_executable(${TARGET_NAME} ${SRC_LIST})
