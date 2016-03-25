@@ -2,12 +2,12 @@ IDI_ICON1 ICON DISCARDABLE "client.ico"
 
 #include "windows.h"
 
-#define HELIOS_VERSION 1,0,0,1
-#define HELIOS_VERSION_STR "1.0.0.1"
+#define CLC_VERSION 1,0,0,1
+#define CLC_VERSION_STR "1.0.0.1"
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION HELIOS_VERSION
- PRODUCTVERSION HELIOS_VERSION
+ FILEVERSION CLC_VERSION
+ PRODUCTVERSION CLC_VERSION
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS VS_FF_DEBUG
@@ -22,13 +22,13 @@ BEGIN
     BEGIN
         BLOCK "000004b0"
         BEGIN
-            VALUE "CompanyName", "CLogic LLC"
-            VALUE "FileDescription", "Helios System Client"
-            VALUE "FileVersion", HELIOS_VERSION_STR
-            VALUE "InternalName", "Helios"
-            VALUE "LegalCopyright", "Copyright (C) 2014, CLogic LLC"
-            VALUE "ProductName", "Helios System"
-            VALUE "ProductVersion", HELIOS_VERSION_STR
+            VALUE "CompanyName", "Private Company"
+            VALUE "FileDescription", "Collector Client"
+            VALUE "FileVersion", CLC_VERSION_STR
+            VALUE "InternalName", "clc"
+            VALUE "LegalCopyright", "Copyright (C) 2016, Oleg Gushchenkov"
+            VALUE "ProductName", "Collector System"
+            VALUE "ProductVersion", CLC_VERSION_STR
         END
     END
     BLOCK "VarFileInfo"
