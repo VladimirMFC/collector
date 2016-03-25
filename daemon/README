@@ -1,0 +1,7 @@
+Collector - the network data receiver.
+
+ - src - sources
+ - lib - contrib libs
+ - conf - configurating files
+ - bin - temporary binaries
+ - tmp - temporary build directory
