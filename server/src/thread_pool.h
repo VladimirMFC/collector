@@ -1,5 +1,4 @@
-#ifndef CL_THREAD_POOL_H
-#define CL_THREAD_POOL_H
+#pragma once
 
 #include <pthread.h>
 #include <stdbool.h>
@@ -26,5 +25,3 @@ bool thread_pool_destroy(thread_pool_t* tp);
 bool thread_pool_run(thread_pool_t* tp);
 
 static void* thread_pool_func(void* arg);
-
-#endif /* !CL_THREAD_POOL_H */

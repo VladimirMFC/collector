@@ -26,9 +26,13 @@ bool thread_pool_destroy(thread_pool_t* tp)
 bool thread_pool_run(thread_pool_t* tp)
 {
 	if (pthread_cond_signal(&tp->thread_ready) != 0)
+	{
 		return false;
+	}
 	else
+	{
 		return true;
+	}
 }
 
 static void* thread_pool_func(void* arg)

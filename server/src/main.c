@@ -84,8 +84,12 @@ void daemonize(const char* cmd)
 		exit(1);
 	}
 	else
+	{
 		if (pid != 0)
+		{
 			exit(0);
+		}
+	}
 	setsid();
 
 	sa.sa_handler = SIG_IGN;
@@ -103,8 +107,12 @@ void daemonize(const char* cmd)
 		exit(1);
 	}
 	else
+	{
 		if (pid != 0)
+		{
 			exit(0);
+		}
+	}
 
 	if (chdir("/") < 0)
 	{
@@ -113,9 +121,13 @@ void daemonize(const char* cmd)
 	}
 
 	if (rl.rlim_max == RLIM_INFINITY)
+	{
 		rl.rlim_max = 1024;
+	}
 	for (size_t i = 0; i < rl.rlim_max; i++)
+	{
 		close(i);
+	}
 
 	fd0 = open("/dev/null", O_RDWR);
 	fd1 = dup(0);
