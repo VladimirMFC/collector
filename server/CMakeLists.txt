@@ -1,4 +1,4 @@
-project(collector)
+project(cld)
 cmake_minimum_required(VERSION 3.1)
 
 set(CMAKE_C_STANDARD 11)
@@ -9,15 +9,11 @@ if(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
 	link_directories("/usr/local/lib")
 endif()
 
-#add_definitions(-DCL_DEBUG)
-#set(CMAKE_C_FLAGS_DEBUG "-DCL_DEBUG")
-
 find_library(UCL ucl REQUIRED)
 find_package(Threads REQUIRED)
 find_package(PostgreSQL REQUIRED)
 
-set(TARGET_NAME "cld")
-#set(EXECUTABLE_OUTPUT_PATH ../bin)
+set(TARGET_NAME ${PROJECT_NAME})
 
 aux_source_directory(./src SRC_LIST)
 add_executable(${TARGET_NAME} ${SRC_LIST})
