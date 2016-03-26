@@ -21,4 +21,5 @@ SOURCES += \
 HEADERS += \
 	src/mainwindow.h
 
-DISTFILES += conf/*
+DISTFILES += \
+	clc.conf
