@@ -16,10 +16,12 @@ CODECFORTR = UTF-8
 
 SOURCES += \
 	src/main.cpp \
-	src/mainwindow.cpp
+	src/mainwindow.cpp \
+	src/chartwidget.cpp
 
 HEADERS += \
-	src/mainwindow.h
+	src/mainwindow.h \
+	src/chartwidget.h
 
 DISTFILES += \
 	clc.conf

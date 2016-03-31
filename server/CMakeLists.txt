@@ -18,4 +18,4 @@ set(TARGET_NAME ${PROJECT_NAME})
 aux_source_directory(./src SRC_LIST)
 add_executable(${TARGET_NAME} ${SRC_LIST})
 
-target_link_libraries(${TARGET_NAME} ${CMAKE_THREAD_LIBS_INIT} ${UCL} ${PostgreSQL_LIBRARIES})
+target_link_libraries(${TARGET_NAME} ${UCL} ${CMAKE_THREAD_LIBS_INIT} ${PostgreSQL_LIBRARIES})

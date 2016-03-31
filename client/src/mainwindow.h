@@ -10,4 +10,8 @@ class MainWindow
 public:
 	MainWindow(QWidget* parent = 0);
 	~MainWindow();
+
+public slots:
+	void keyPressEvent(QKeyEvent* ke);
+
 };
