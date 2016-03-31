@@ -8,9 +8,19 @@
 ChartWidget::ChartWidget(const QString& name, QWidget* parent)
 	: QWidget(parent), name(name)
 {
+	colorBlack = QColor(29, 31, 33);
+	colorWhite = QColor(197, 200, 198);
+	colorRed = QColor(204, 102, 102);
+	colorOrange = QColor(222, 147, 95);
+	colorYellow = QColor(240, 198, 116);
+	colorGreen = QColor(181, 189, 104);
+	colorLBlue = QColor(138, 190, 183);
+	colorDBlue = QColor(129, 162, 190);
+	colorPurple = QColor(187, 148, 187);
+
 	setAutoFillBackground(true);
 	QPalette pal = palette();
-	pal.setColor(QPalette::Window, QColor(Qt::black));
+	pal.setColor(QPalette::Window, colorBlack);
 	setPalette(pal);
 
 	QTimer *timer = new QTimer(this);
@@ -48,17 +58,14 @@ void ChartWidget::paintEvent(QPaintEvent*)
 		f += timeList[i];
 	}
 
-	QString sst(name);
-	sst += QString("\n");
-
 	f = (timeList.size() < 5 && timeList.size() != 0) ? f / timeList.size() : f / 5;
 
+	QString sst(name);
+	sst += QString("\n");
 	sst += QString::number(f);
 	sst += QString("ms");
-	f /= 4;
 
-	QColor cl(f, 255 - f, 0);
-	painter.setPen(cl);
+	painter.setPen(genColor(0, 1000, f));
 	painter.setFont(QFont("DroidSansMonoForPowerline", height() / 3));
 
 	QRect trc;
@@ -78,8 +85,45 @@ void ChartWidget::paintEvent(QPaintEvent*)
 		rc.moveBottom(height() - 1);
 		rc.moveRight(x);
 
-		painter.fillRect(rc, QColor(timeList[i] / 4, 255 - (timeList[i] / 4), 0));
+		painter.fillRect(rc, genColor(0, 1000, timeList[i]));
 	}
 
 	painter.drawRect(rect());
+}
+
+QColor ChartWidget::genColor(int min, int max, int val)
+{
+	int cur = 0, step = (max - min) / 5;
+
+	cur += step;
+	if (val <= cur)
+	{
+		return colorDBlue;
+	}
+
+	cur += step;
+	if (val <= cur)
+	{
+		return colorGreen;
+	}
+
+	cur += step;
+	if (val <= cur)
+	{
+		return colorYellow;
+	}
+
+	cur += step;
+	if (val <= cur)
+	{
+		return colorOrange;
+	}
+
+	cur += step;
+	if (val <= cur)
+	{
+		return colorRed;
+	}
+
+	return colorPurple;
 }

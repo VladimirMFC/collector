@@ -19,7 +19,18 @@ protected:
 	void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
 
 private:
+	QColor genColor(int min, int max, int val);
 	QString name;
 	QList<int> timeList;
+
+	QColor colorBlack;
+	QColor colorWhite;
+	QColor colorRed;
+	QColor colorOrange;
+	QColor colorYellow;
+	QColor colorGreen;
+	QColor colorLBlue;
+	QColor colorDBlue;
+	QColor colorPurple;
 
 };
