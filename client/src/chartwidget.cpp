@@ -14,7 +14,7 @@ ChartWidget::ChartWidget(const QString& name, QWidget* parent)
 	setPalette(pal);
 
 	QTimer *timer = new QTimer(this);
-	connect(timer, SIGNAL(timeout()), this, SLOT(update()));
+	connect(timer, SIGNAL(timeout()), this, SLOT(updateData()));
 	timer->start(1000);
 
 	QTime time = QTime::currentTime();
@@ -25,12 +25,22 @@ ChartWidget::~ChartWidget()
 {
 }
 
+void ChartWidget::updateData()
+{
+	timeList.prepend(qrand() % 1000);
+
+	if (timeList.size() > 1000)
+	{
+		timeList.removeLast();
+	}
+
+	update(rect());
+}
+
 void ChartWidget::paintEvent(QPaintEvent*)
 {
 	QPainter painter(this);
 	painter.setRenderHint(QPainter::Antialiasing);
-
-	timeList.prepend(qrand() % 1000);
 
 	int f = 0;
 	for (int i = 0; i < 5 && i < timeList.size(); ++i)
@@ -41,14 +51,7 @@ void ChartWidget::paintEvent(QPaintEvent*)
 	QString sst(name);
 	sst += QString("\n");
 
-	if (timeList.size() >= 5)
-	{
-		f /= 5;
-	}
-	else
-	{
-		f /= timeList.size();
-	}
+	f = (timeList.size() < 5 && timeList.size() != 0) ? f / timeList.size() : f / 5;
 
 	sst += QString::number(f);
 	sst += QString("ms");
