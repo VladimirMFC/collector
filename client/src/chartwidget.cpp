@@ -6,7 +6,7 @@
 #include <QtCore/QTime>
 
 ChartWidget::ChartWidget(const QString& name, QWidget* parent)
-	: QWidget(parent), name(name)
+	: QWidget(parent), name(name), maxValue(100), widthValue(10), sumSize(10), historySize(1000)
 {
 	colorBlack = QColor(29, 31, 33);
 	colorWhite = QColor(197, 200, 198);
@@ -14,8 +14,8 @@ ChartWidget::ChartWidget(const QString& name, QWidget* parent)
 	colorOrange = QColor(222, 147, 95);
 	colorYellow = QColor(240, 198, 116);
 	colorGreen = QColor(181, 189, 104);
-	colorLBlue = QColor(138, 190, 183);
-	colorDBlue = QColor(129, 162, 190);
+	colorCyan = QColor(138, 190, 183);
+	colorBlue = QColor(129, 162, 190);
 	colorPurple = QColor(187, 148, 187);
 
 	setAutoFillBackground(true);
@@ -25,7 +25,7 @@ ChartWidget::ChartWidget(const QString& name, QWidget* parent)
 
 	QTimer *timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(updateData()));
-	timer->start(1000);
+	timer->start(100);
 
 	QTime time = QTime::currentTime();
 	qsrand((uint)time.msec());
@@ -37,9 +37,46 @@ ChartWidget::~ChartWidget()
 
 void ChartWidget::updateData()
 {
-	timeList.prepend(qrand() % 1000);
+	//timeList.prepend(qrand() % maxValue);
+	if (timeList.size() > 1)
+	{
+		if (timeList[0] < maxValue && timeList[0] > 0)
+		{
+			if (timeList[0] > timeList[1])
+			{
+				timeList.prepend(timeList[0] + 1);
+			}
+			else
+			{
+				timeList.prepend(timeList[0] - 1);
+			}
+		}
+		else
+		{
+			if (timeList[0] == maxValue)
+			{
+				timeList.prepend(timeList[0] - 1);
+			}
+			else
+			{
+				timeList.prepend(timeList[0] + 1);
+			}
+		}
+	}
+	else
+	{
+		timeList.prepend(qrand() % maxValue);
+		if (qrand() % 1 == 0)
+		{
+			timeList.prepend(timeList[0] - 1);
+		}
+		else
+		{
+			timeList.prepend(timeList[0] + 1);
+		}
+	}
 
-	if (timeList.size() > 1000)
+	if (timeList.size() > historySize)
 	{
 		timeList.removeLast();
 	}
@@ -53,39 +90,37 @@ void ChartWidget::paintEvent(QPaintEvent*)
 	painter.setRenderHint(QPainter::Antialiasing);
 
 	int f = 0;
-	for (int i = 0; i < 5 && i < timeList.size(); ++i)
+	for (int i = 0; i < sumSize && i < timeList.size(); ++i)
 	{
 		f += timeList[i];
 	}
 
-	f = (timeList.size() < 5 && timeList.size() != 0) ? f / timeList.size() : f / 5;
+	f = (timeList.size() < sumSize && timeList.size() != 0) ? f / timeList.size() : f / sumSize;
 
 	QString sst(name);
-	sst += QString("\n");
-	sst += QString::number(f);
-	sst += QString("ms");
+	sst += QString("\n\u035Et ") + QString::number(f) + QString("ms");
 
-	painter.setPen(genColor(0, 1000, f));
+	painter.setPen(genColor(0, maxValue, f));
 	painter.setFont(QFont("DroidSansMonoForPowerline", height() / 3));
 
 	QRect trc;
-	painter.drawText(QRect(10, 0, width(), height()), Qt::AlignVCenter, sst, &trc);
+	painter.drawText(QRect(widthValue, 0, width(), height()), Qt::AlignVCenter, sst, &trc);
 
-	for (int i = 0, x = width() - 1; i < timeList.size() && x > trc.width() + 20; ++i, x -= 11)
+	for (int i = 0, x = width() - 1; i < timeList.size() && x > trc.width() + (2 * widthValue) + 2; ++i, x -= widthValue + 1)
 	{
-		QRectF rc(QPointF(0, 1), QPointF(10.0, (float)height() / 1000.0 * (float)timeList[i]));
-		if (rc.height() < 20)
+		QRectF rc(QPointF(0.0, 1.0), QPointF((float)widthValue, (float)height() - ((float)height() / (float)maxValue * (float)timeList[i])));
+		if (rc.height() < 5)
 		{
-			rc.setHeight(20);
+			rc.setHeight(5);
 		}
-		if (rc.height() > height() - 2)
+		if (rc.height() > height() - 5)
 		{
-			rc.setHeight(height() - 2);
+			rc.setHeight(height() - 5);
 		}
 		rc.moveBottom(height() - 1);
 		rc.moveRight(x);
 
-		painter.fillRect(rc, genColor(0, 1000, timeList[i]));
+		painter.fillRect(rc, genColor(0, maxValue, timeList[i]));
 	}
 
 	painter.drawRect(rect());
@@ -98,7 +133,7 @@ QColor ChartWidget::genColor(int min, int max, int val)
 	cur += step;
 	if (val <= cur)
 	{
-		return colorDBlue;
+		return colorBlue;
 	}
 
 	cur += step;
@@ -119,11 +154,5 @@ QColor ChartWidget::genColor(int min, int max, int val)
 		return colorOrange;
 	}
 
-	cur += step;
-	if (val <= cur)
-	{
-		return colorRed;
-	}
-
-	return colorPurple;
+	return colorRed;
 }

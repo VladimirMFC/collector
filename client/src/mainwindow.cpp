@@ -2,7 +2,7 @@
 
 #include "chartwidget.h"
 
-#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QGridLayout>
 #include <QtGui/QKeyEvent>
 
 MainWindow::MainWindow(QWidget* parent)
@@ -11,11 +11,11 @@ MainWindow::MainWindow(QWidget* parent)
 	QWidget *centralWidget = new QWidget(this);
 	setCentralWidget(centralWidget);
 
-	QVBoxLayout *layout = new QVBoxLayout;
+	QGridLayout *layout = new QGridLayout(centralWidget);
 
 	for (int i = 0; i < 10; ++i)
 	{
-		ChartWidget *chart = new ChartWidget("Host");
+		ChartWidget *chart = new ChartWidget(QString("Host") + QString::number(i + 1), centralWidget);
 		layout->addWidget(chart);
 	}
 

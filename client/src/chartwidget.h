@@ -21,7 +21,12 @@ protected:
 private:
 	QColor genColor(int min, int max, int val);
 	QString name;
+
 	QList<int> timeList;
+	int maxValue;
+	int widthValue;
+	int sumSize;
+	int historySize;
 
 	QColor colorBlack;
 	QColor colorWhite;
@@ -29,8 +34,8 @@ private:
 	QColor colorOrange;
 	QColor colorYellow;
 	QColor colorGreen;
-	QColor colorLBlue;
-	QColor colorDBlue;
+	QColor colorCyan;
+	QColor colorBlue;
 	QColor colorPurple;
 
 };
