@@ -88,6 +88,8 @@ void ChartWidget::paintEvent(QPaintEvent*)
 {
 	QPainter painter(this);
 	painter.setRenderHint(QPainter::Antialiasing);
+	painter.setRenderHint(QPainter::TextAntialiasing);
+	painter.setRenderHint(QPainter::HighQualityAntialiasing);
 
 	int f = 0;
 	for (int i = 0; i < sumSize && i < timeList.size(); ++i)
