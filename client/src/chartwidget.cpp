@@ -98,7 +98,7 @@ void ChartWidget::paintEvent(QPaintEvent*)
 	f = (timeList.size() < sumSize && timeList.size() != 0) ? f / timeList.size() : f / sumSize;
 
 	QString sst(name);
-	sst += QString("\n\u035Et ") + QString::number(f) + QString("ms");
+	sst += QString("\nt ") + QString::number(f) + QString("ms");
 
 	painter.setPen(genColor(0, maxValue, f));
 	painter.setFont(QFont("DroidSansMonoForPowerline", height() / 3));
