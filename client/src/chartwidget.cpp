@@ -25,7 +25,7 @@ ChartWidget::ChartWidget(const QString& name, QWidget* parent)
 
 	QTimer *timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(updateData()));
-	timer->start(100);
+	timer->start(1000);
 
 	QTime time = QTime::currentTime();
 	qsrand((uint)time.msec());
@@ -111,13 +111,13 @@ void ChartWidget::paintEvent(QPaintEvent*)
 	for (int i = 0, x = width() - 1; i < timeList.size() && x > trc.width() + (2 * widthValue) + 2; ++i, x -= widthValue + 1)
 	{
 		QRectF rc(QPointF(0.0, 1.0), QPointF((float)widthValue, (float)height() - ((float)height() / (float)maxValue * (float)timeList[i])));
-		if (rc.height() < 5)
+		if (rc.height() < 2)
 		{
-			rc.setHeight(5);
+			rc.setHeight(2);
 		}
-		if (rc.height() > height() - 5)
+		if (rc.height() > height() - 2)
 		{
-			rc.setHeight(height() - 5);
+			rc.setHeight(height() - 2);
 		}
 		rc.moveBottom(height() - 1);
 		rc.moveRight(x);
@@ -125,7 +125,7 @@ void ChartWidget::paintEvent(QPaintEvent*)
 		painter.fillRect(rc, genColor(0, maxValue, timeList[i]));
 	}
 
-	painter.drawRect(rect());
+	//painter.drawRect(rect());
 }
 
 QColor ChartWidget::genColor(int min, int max, int val)
