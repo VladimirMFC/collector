@@ -23,7 +23,7 @@ int main(int argc, char** argv)
 	}
 
 	MainWindow w;
-	w.showMaximized();
+	w.showFullScreen();
 
 	return a.exec();
 }
