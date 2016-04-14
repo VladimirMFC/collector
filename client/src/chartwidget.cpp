@@ -37,8 +37,8 @@ ChartWidget::~ChartWidget()
 
 void ChartWidget::updateData()
 {
-	//timeList.prepend(qrand() % maxValue);
-	if (timeList.size() > 1)
+	timeList.prepend(qrand() % maxValue);
+	/*if (timeList.size() > 1)
 	{
 		if (timeList[0] < maxValue && timeList[0] > 0)
 		{
@@ -74,7 +74,7 @@ void ChartWidget::updateData()
 		{
 			timeList.prepend(timeList[0] + 1);
 		}
-	}
+	}*/
 
 	if (timeList.size() > historySize)
 	{

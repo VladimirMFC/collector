@@ -18,14 +18,14 @@ SOURCES += \
 	src/main.cpp \
 	src/mainwindow.cpp \
 	src/chartwidget.cpp \
-    src/config.cpp \
-    src/log.cpp
+	src/config.cpp \
+	src/log.cpp
 
 HEADERS += \
 	src/mainwindow.h \
 	src/chartwidget.h \
-    src/config.h \
-    src/log.h
+	src/config.h \
+	src/log.h
 
 DISTFILES += \
 	clc.conf

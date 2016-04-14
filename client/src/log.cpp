@@ -13,7 +13,7 @@ Log::~Log()
 
 Log* Log::getInstance()
 {
-	static CLog* instance = new CLog("application.log");
+	static Log *instance = new Log("application.log");
 
 	return instance;
 }
