@@ -1,3 +1,5 @@
+#include "log.h"
+#include "config.h"
 #include "mainwindow.h"
 
 #include <QtWidgets/QApplication>
