@@ -8,4 +8,4 @@ clean:
 	rm -rfv temp
 
 run:	build
-	./temp/clc
+	./temp/clc -c clc.conf -l ./temp/clc.log

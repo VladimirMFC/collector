@@ -16,12 +16,14 @@ CODECFORTR = UTF-8
 
 SOURCES += \
 	src/main.cpp \
+	src/application.cpp \
 	src/mainwindow.cpp \
 	src/chartwidget.cpp \
 	src/config.cpp \
 	src/log.cpp
 
 HEADERS += \
+	src/application.h \
 	src/mainwindow.h \
 	src/chartwidget.h \
 	src/config.h \

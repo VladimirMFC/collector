@@ -4,6 +4,8 @@
 #include <QtCore/QFile>
 #include <QtCore/QJsonDocument>
 
+QJsonObject Config::config;
+
 Config::Config()
 {
 }
@@ -12,15 +14,20 @@ Config::~Config()
 {
 }
 
-bool Config::loadFromFile(const QString& file)
+bool Config::loadConfigFromFileByName(const QString& fileName)
 {
-	QString configFile = QStandardPaths::locate(QStandardPaths::ConfigLocation, file, QStandardPaths::LocateFile);
-	if (configFile == QString())
+	QString configPath = QStandardPaths::locate(QStandardPaths::ConfigLocation, fileName, QStandardPaths::LocateFile);
+	if (configPath == QString())
 	{
 		return false;
 	}
 
-	QFile loadFile(configFile);
+	return loadConfigFromFileByPath(configPath);
+}
+
+bool Config::loadConfigFromFileByPath(const QString& filePath)
+{
+	QFile loadFile(filePath);
 	if (!loadFile.open(QIODevice::ReadOnly))
 	{
 		return false;
@@ -38,15 +45,20 @@ bool Config::loadFromFile(const QString& file)
 	return true;
 }
 
-bool Config::saveToFile(const QString& file)
+bool Config::saveConfigToFileByName(const QString& fileName)
 {
-	QString configLocation = QStandardPaths::locate(QStandardPaths::ConfigLocation, "", QStandardPaths::LocateDirectory);
-	if (configLocation == QString())
+	QString configPath = QStandardPaths::locate(QStandardPaths::ConfigLocation, "", QStandardPaths::LocateDirectory);
+	if (configPath == QString())
 	{
 		return false;
 	}
 
-	QFile saveFile(configLocation + file);
+	return saveConfigToFileByPath(configPath + fileName);
+}
+
+bool Config::saveConfigToFileByPath(const QString& filePath)
+{
+	QFile saveFile(filePath);
 	if (!saveFile.open(QIODevice::WriteOnly))
 	{
 		return false;
@@ -58,12 +70,37 @@ bool Config::saveToFile(const QString& file)
 	return true;
 }
 
-QString Config::getValue(const QString& name)
+QString Config::getConfigString(const QString& name)
 {
 	return config[name].toString();
 }
 
-void Config::setValue(const QString& name, const QString& value)
+int Config::getConfigInt(const QString& name)
+{
+	return config[name].toInt();
+}
+
+bool Config::getConfigBool(const QString& name)
+{
+	return config[name].toBool();
+}
+
+double Config::getConfigDouble(const QString& name)
+{
+	return config[name].toDouble();
+}
+
+QVariant Config::getConfigVariant(const QString& name)
+{
+	return config[name].toVariant();
+}
+
+void Config::setConfigValue(const QString& name, const QString& value)
 {
 	config[name] = value;
+}
+
+bool Config::configLoaded()
+{
+	return !config.empty();
 }

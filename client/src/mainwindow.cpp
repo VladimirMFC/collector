@@ -6,7 +6,7 @@
 #include <QtGui/QKeyEvent>
 
 MainWindow::MainWindow(QWidget* parent)
-	: QMainWindow(parent)
+	: QMainWindow(parent), Log(), Config()
 {
 	QWidget *centralWidget = new QWidget(this);
 	setCentralWidget(centralWidget);

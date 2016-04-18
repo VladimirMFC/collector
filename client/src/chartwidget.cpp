@@ -6,7 +6,8 @@
 #include <QtCore/QTime>
 
 ChartWidget::ChartWidget(const QString& name, QWidget* parent)
-	: QWidget(parent), name(name), maxValue(100), widthValue(10), sumSize(10), historySize(1000)
+	: QWidget(parent), Log(), Config(),
+	name(name), maxValue(100), widthValue(10), sumSize(10), historySize(1000)
 {
 	colorBlack = QColor(29, 31, 33);
 	colorWhite = QColor(197, 200, 198);

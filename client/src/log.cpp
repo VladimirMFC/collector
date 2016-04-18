@@ -1,71 +1,75 @@
 #include "log.h"
 
-Log::Log(const QString& filename)
-	: m_filename(filename), m_file(0), m_stream(0)
+#include <QtCore/QStandardPaths>
+
+QString Log::fileName;
+QFile *Log::file = nullptr;
+QTextStream *Log::fileStream = nullptr;
+QTextStream *Log::consoleStream = nullptr;
+
+Log::Log()
 {
-	create();
 }
 
 Log::~Log()
 {
-	destroy();
 }
 
-Log* Log::getInstance()
+bool Log::openLogByFileName(const QString& fileName)
 {
-	static Log *instance = new Log("application.log");
-
-	return instance;
-}
-
-void Log::freeInstance()
-{
-	delete this;
-}
-
-void Log::information(const QString& message)
-{
-	writeMessage(MT_INFO, message);
-
-	m_file->flush();
-}
-
-void Log::warning(const QString& message)
-{
-	writeMessage(MT_WARN, message);
-
-	m_file->flush();
-}
-
-void Log::error(const QString& message)
-{
-	writeMessage(MT_ERR, message);
-
-	m_file->flush();
-}
-
-void Log::create()
-{
-	m_file = new QFile(m_filename);
-	if (!m_file->open(QIODevice::WriteOnly | QIODevice::Text))
+	QString logPath = QStandardPaths::locate(QStandardPaths::ConfigLocation, "", QStandardPaths::LocateDirectory);
+	if (logPath == QString())
 	{
-		return;
+		return false;
 	}
 
-	m_stream = new QTextStream(m_file);
-	m_stream->setCodec("UTF-8");
-
-	writeHeader();
+	return openLogByFilePath(logPath + fileName);
 }
 
-void Log::destroy()
+bool Log::openLogByFilePath(const QString& filePath)
+{
+	file = new QFile(filePath);
+	if (!file->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text))
+	{
+		return false;
+	}
+
+	fileStream = new QTextStream(file);
+	fileStream->setCodec("UTF-8");
+
+	consoleStream = new QTextStream(stdout);
+	consoleStream->setCodec("UTF-8");
+
+	writeHeader();
+
+	return true;
+}
+
+void Log::closeLog()
 {
 	writeFooter();
 
-	m_file->close();
+	file->close();
 
-	delete m_stream;
-	delete m_file;
+	delete fileStream;
+	delete file;
+
+	delete consoleStream;
+}
+
+void Log::logInfo(const QString& message)
+{
+	writeMessage(MT_INFO, message);
+}
+
+void Log::logWarn(const QString& message)
+{
+	writeMessage(MT_WARN, message);
+}
+
+void Log::logCrit(const QString& message)
+{
+	writeMessage(MT_CRIT, message);
 }
 
 QString Log::getTimeStamp()
@@ -77,45 +81,44 @@ QString Log::getTimeStamp()
 
 void Log::writeHeader()
 {
-	writeMessage(MT_INFO, QObject::tr("α"));
-
-	m_stream->flush();
-	m_file->flush();
+	writeMessage(MT_INFO, QObject::tr("Started"));
 }
 
 void Log::writeFooter()
 {
-	writeMessage(MT_INFO, QObject::tr("Ω"));
-
-	m_stream->flush();
-	m_file->flush();
+	writeMessage(MT_INFO, QObject::tr("Stoped"));
 }
 
 void Log::writeMessage(EMessageType type, const QString& message)
 {
-	(*m_stream) << getTimeStamp() << "  ";
+	(*fileStream) << getTimeStamp() << "  ";
 
 	switch (type)
 	{
 	case MT_INFO:
-		(*m_stream) << QObject::tr("Info       ");
+		(*fileStream) << QObject::tr("Info: ");
 		break;
 
 	case MT_WARN:
-		(*m_stream) << QObject::tr("Warning    ");
+		(*fileStream) << QObject::tr("Warning: ");
 		break;
 
-	case MT_ERR:
-		(*m_stream) << QObject::tr("Error      ");
+	case MT_CRIT:
+		(*fileStream) << QObject::tr("Critical: ");
 		break;
 
 	default:
-		(*m_stream) << QObject::tr("Unknown    ");
+		(*fileStream) << QObject::tr("Unknown: ");
 		break;
 	}
 
-	(*m_stream) << message << ".\n";
+	(*fileStream) << message << "\n";
+	fileStream->flush();
+	file->flush();
 
-	m_stream->flush();
-	m_file->flush();
+	if (type == MT_WARN || type == MT_CRIT)
+	{
+		(*consoleStream) << message << "\n";
+		consoleStream->flush();
+	}
 }

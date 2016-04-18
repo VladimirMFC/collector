@@ -8,38 +8,35 @@
 class Log
 {
 public:
+	Log();
+	~Log();
+
+	static bool openLogByFileName(const QString& fileName);
+	static bool openLogByFilePath(const QString& filePath);
+	static void closeLog();
+
+	static void logInfo(const QString& message);
+	static void logWarn(const QString& message);
+	static void logCrit(const QString& message);
+
+private:
 	enum EMessageType
 	{
 		MT_INFO,
 		MT_WARN,
-		MT_ERR
+		MT_CRIT
 	};
 
-	Log(const QString& filename);
-	~Log();
+	static QString fileName;
+	static QFile *file;
+	static QTextStream *fileStream;
 
-	static Log* getInstance();
-	void freeInstance();
+	static QTextStream *consoleStream;
 
-	void information(const QString& message);
-	void warning(const QString& message);
-	void error(const QString& message);
+	static QString getTimeStamp();
 
-private:
-	Log(const Log& log);
-	const Log& operator= (const Log& rhs);
-
-	QString m_filename;
-	QFile *m_file;
-	QTextStream *m_stream;
-
-	void create();
-	void destroy();
-
-	QString getTimeStamp();
-
-	void writeHeader();
-	void writeFooter();
-	void writeMessage(EMessageType type, const QString& message);
+	static void writeHeader();
+	static void writeFooter();
+	static void writeMessage(EMessageType type, const QString& message);
 
 };

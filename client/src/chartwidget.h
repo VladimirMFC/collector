@@ -1,10 +1,13 @@
 #pragma once
 
 #include <QtWidgets/QWidget>
+#include "log.h"
+#include "config.h"
+
 #include <QtCore/QList>
 
 class ChartWidget
-	: public QWidget
+	: public QWidget, public Log, public Config
 {
 	Q_OBJECT
 
