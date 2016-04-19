@@ -17,7 +17,7 @@ Log::~Log()
 
 bool Log::openLogByFileName(const QString& fileName)
 {
-	QString logPath = QStandardPaths::locate(QStandardPaths::ConfigLocation, "", QStandardPaths::LocateDirectory);
+	QString logPath = QStandardPaths::locate(QStandardPaths::TempLocation, "", QStandardPaths::LocateDirectory);
 	if (logPath == QString())
 	{
 		return false;
