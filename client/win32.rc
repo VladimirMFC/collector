@@ -20,19 +20,19 @@ VS_VERSION_INFO VERSIONINFO
 BEGIN
     BLOCK "StringFileInfo"
     BEGIN
-        BLOCK "000004b0"
-        BEGIN
-            VALUE "CompanyName", "Private Company"
-            VALUE "FileDescription", "Collector Client"
-            VALUE "FileVersion", CLC_VERSION_STR
-            VALUE "InternalName", "clc"
-            VALUE "LegalCopyright", "Copyright (C) 2016, Oleg Gushchenkov"
-            VALUE "ProductName", "Collector System"
-            VALUE "ProductVersion", CLC_VERSION_STR
-        END
+	BLOCK "000004b0"
+	BEGIN
+//            VALUE "CompanyName", "Private Company"
+	    VALUE "FileDescription", "Collector Client"
+	    VALUE "FileVersion", CLC_VERSION_STR
+	    VALUE "InternalName", "clc"
+//	    VALUE "LegalCopyright", "Copyright (C) 2016, Oleg Gushchenkov"
+	    VALUE "ProductName", "Collector System"
+	    VALUE "ProductVersion", CLC_VERSION_STR
+	END
     END
     BLOCK "VarFileInfo"
     BEGIN
-        VALUE "Translation", 0x0, 1200
+	VALUE "Translation", 0x0, 1200
     END
 END
