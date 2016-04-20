@@ -7,5 +7,5 @@ Application::Application(int& argc, char** argv)
 
 Application::~Application()
 {
-	Log::closeLog();
+	Log::closeFile();
 }

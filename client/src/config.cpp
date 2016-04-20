@@ -3,6 +3,7 @@
 #include <QtCore/QStandardPaths>
 #include <QtCore/QFile>
 #include <QtCore/QJsonDocument>
+#include <QtCore/QJsonArray>
 
 QJsonObject Config::config;
 
@@ -14,7 +15,7 @@ Config::~Config()
 {
 }
 
-bool Config::loadConfigFromFileByName(const QString& fileName)
+bool Config::loadFromFileByName(const QString& fileName)
 {
 	QString configPath = QStandardPaths::locate(QStandardPaths::ConfigLocation, fileName, QStandardPaths::LocateFile);
 	if (configPath == QString())
@@ -22,10 +23,10 @@ bool Config::loadConfigFromFileByName(const QString& fileName)
 		return false;
 	}
 
-	return loadConfigFromFileByPath(configPath);
+	return loadFromFileByPath(configPath);
 }
 
-bool Config::loadConfigFromFileByPath(const QString& filePath)
+bool Config::loadFromFileByPath(const QString& filePath)
 {
 	QFile loadFile(filePath);
 	if (!loadFile.open(QIODevice::ReadOnly))
@@ -45,62 +46,65 @@ bool Config::loadConfigFromFileByPath(const QString& filePath)
 	return true;
 }
 
-bool Config::saveConfigToFileByName(const QString& fileName)
+QString Config::getString(const QString& name)
 {
-	QString configPath = QStandardPaths::locate(QStandardPaths::ConfigLocation, "", QStandardPaths::LocateDirectory);
-	if (configPath == QString())
+	return findKey(name).toString();
+}
+
+int Config::getInt(const QString& name)
+{
+	return findKey(name).toInt();
+}
+
+bool Config::getBool(const QString& name)
+{
+	return findKey(name).toBool();
+}
+
+double Config::getDouble(const QString& name)
+{
+	return findKey(name).toDouble();
+}
+
+QVariant Config::getVariant(const QString& name)
+{
+	return findKey(name).toVariant();
+}
+
+QColor Config::getColor(const QString& name)
+{
+	QColor color;
+
+	QJsonArray jArr = findKey(name).toArray();
+
+	if (jArr.size() == 3)
 	{
-		return false;
+		color.setRgb(jArr.at(0).toInt(), jArr.at(1).toInt(), jArr.at(2).toInt());
 	}
 
-	return saveConfigToFileByPath(configPath + fileName);
+	return color;
 }
 
-bool Config::saveConfigToFileByPath(const QString& filePath)
+bool Config::keyExist(const QString& name)
 {
-	QFile saveFile(filePath);
-	if (!saveFile.open(QIODevice::WriteOnly))
-	{
-		return false;
-	}
-
-	QJsonDocument saveDoc(config);
-	saveFile.write(saveDoc.toJson());
-
-	return true;
+	return !findKey(name).isUndefined();
 }
 
-QString Config::getConfigString(const QString& name)
-{
-	return config[name].toString();
-}
-
-int Config::getConfigInt(const QString& name)
-{
-	return config[name].toInt();
-}
-
-bool Config::getConfigBool(const QString& name)
-{
-	return config[name].toBool();
-}
-
-double Config::getConfigDouble(const QString& name)
-{
-	return config[name].toDouble();
-}
-
-QVariant Config::getConfigVariant(const QString& name)
-{
-	return config[name].toVariant();
-}
-
-void Config::setConfigValue(const QString& name, const QString& value)
-{
-	config[name] = value;
-}
-
-bool Config::configLoaded()
+bool Config::isLoaded()
 {
 	return !config.empty();
+}
+
+QJsonValue Config::findKey(const QString& name)
+{
+	QStringList strList = name.split('/', QString::SkipEmptyParts);
+
+	QJsonValue jVal(config);
+	for (QStringList::const_iterator sIter = strList.constBegin(); sIter != strList.constEnd(); ++sIter)
+	{
+		QJsonObject jObj = jVal.toObject();
+		jVal = jObj.value(*sIter);
+	}
+
+	return jVal;
 }

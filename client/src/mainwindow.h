@@ -14,6 +14,11 @@ public:
 	~MainWindow();
 
 public slots:
-	void keyPressEvent(QKeyEvent* ke);
+	void keyPressEvent(QKeyEvent* ke) Q_DECL_OVERRIDE;
+
+private:
+	void initConfigData();
+
+	int colCount;
 
 };

@@ -22,14 +22,17 @@ protected:
 	void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
 
 private:
+	void initConfigData();
+
 	QColor genColor(int min, int max, int val);
 	QString name;
 
 	QList<int> timeList;
 	int maxValue;
-	int widthValue;
 	int sumSize;
 	int historySize;
+
+	QString fontName;
 
 	QColor colorBlack;
 	QColor colorWhite;

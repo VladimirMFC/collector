@@ -7,7 +7,7 @@
 
 ChartWidget::ChartWidget(const QString& name, QWidget* parent)
 	: QWidget(parent), Log(), Config(),
-	name(name), maxValue(100), widthValue(10), sumSize(10), historySize(1000)
+	name(name), maxValue(100), sumSize(10), historySize(1000), fontName("DroidSansMonoForPowerline")
 {
 	colorBlack = QColor(29, 31, 33);
 	colorWhite = QColor(197, 200, 198);
@@ -18,6 +18,8 @@ ChartWidget::ChartWidget(const QString& name, QWidget* parent)
 	colorCyan = QColor(138, 190, 183);
 	colorBlue = QColor(129, 162, 190);
 	colorPurple = QColor(187, 148, 187);
+
+	initConfigData();
 
 	setAutoFillBackground(true);
 	QPalette pal = palette();
@@ -39,43 +41,6 @@ ChartWidget::~ChartWidget()
 void ChartWidget::updateData()
 {
 	timeList.prepend(qrand() % maxValue);
-	/*if (timeList.size() > 1)
-	{
-		if (timeList[0] < maxValue && timeList[0] > 0)
-		{
-			if (timeList[0] > timeList[1])
-			{
-				timeList.prepend(timeList[0] + 1);
-			}
-			else
-			{
-				timeList.prepend(timeList[0] - 1);
-			}
-		}
-		else
-		{
-			if (timeList[0] == maxValue)
-			{
-				timeList.prepend(timeList[0] - 1);
-			}
-			else
-			{
-				timeList.prepend(timeList[0] + 1);
-			}
-		}
-	}
-	else
-	{
-		timeList.prepend(qrand() % maxValue);
-		if (qrand() % 1 == 0)
-		{
-			timeList.prepend(timeList[0] - 1);
-		}
-		else
-		{
-			timeList.prepend(timeList[0] + 1);
-		}
-	}*/
 
 	if (timeList.size() > historySize)
 	{
@@ -92,6 +57,8 @@ void ChartWidget::paintEvent(QPaintEvent*)
 	painter.setRenderHint(QPainter::TextAntialiasing);
 	painter.setRenderHint(QPainter::HighQualityAntialiasing);
 
+	int barWidth = height() / 10;
+
 	int f = 0;
 	for (int i = 0; i < sumSize && i < timeList.size(); ++i)
 	{
@@ -104,14 +71,14 @@ void ChartWidget::paintEvent(QPaintEvent*)
 	sst += QString("\nt ") + QString::number(f) + QString("ms");
 
 	painter.setPen(genColor(0, maxValue, f));
-	painter.setFont(QFont("DroidSansMonoForPowerline", height() / 3));
+	painter.setFont(QFont(fontName, height() / 3));
 
 	QRect trc;
-	painter.drawText(QRect(widthValue, 0, width(), height()), Qt::AlignVCenter, sst, &trc);
+	painter.drawText(QRect(barWidth / 2, 0, width(), height()), Qt::AlignVCenter, sst, &trc);
 
-	for (int i = 0, x = width() - 1; i < timeList.size() && x > trc.width() + (2 * widthValue) + 2; ++i, x -= widthValue + 1)
+	for (int i = 0, x = width() - 1; i < timeList.size() && x > trc.width() + (2 * barWidth) + 2; ++i, x -= barWidth + 1)
 	{
-		QRectF rc(QPointF(0.0, 1.0), QPointF((float)widthValue, (float)height() - ((float)height() / (float)maxValue * (float)timeList[i])));
+		QRectF rc(QPointF(0.0, 1.0), QPointF((float)barWidth, (float)height() - ((float)height() / (float)maxValue * (float)timeList[i])));
 		if (rc.height() < 2)
 		{
 			rc.setHeight(2);
@@ -125,8 +92,56 @@ void ChartWidget::paintEvent(QPaintEvent*)
 
 		painter.fillRect(rc, genColor(0, maxValue, timeList[i]));
 	}
+}
 
-	//painter.drawRect(rect());
+void ChartWidget::initConfigData()
+{
+	if (Config::keyExist("history"))
+	{
+		historySize = Config::getInt("history");
+	}
+
+	if (Config::keyExist("font"))
+	{
+		fontName = Config::getString("font");
+	}
+
+	if (Config::keyExist("colors/black"))
+	{
+		colorBlack = Config::getColor("colors/black");
+	}
+	if (Config::keyExist("colors/white"))
+	{
+		colorWhite = Config::getColor("colors/white");
+	}
+	if (Config::keyExist("colors/red"))
+	{
+		colorRed = Config::getColor("colors/red");
+	}
+	if (Config::keyExist("colors/orange"))
+	{
+		colorOrange = Config::getColor("colors/orange");
+	}
+	if (Config::keyExist("colors/yellow"))
+	{
+		colorYellow = Config::getColor("colors/yellow");
+	}
+	if (Config::keyExist("colors/green"))
+	{
+		colorGreen = Config::getColor("colors/green");
+	}
+	if (Config::keyExist("colors/cyan"))
+	{
+		colorCyan = Config::getColor("colors/cyan");
+	}
+	if (Config::keyExist("colors/blue"))
+	{
+		colorBlue = Config::getColor("colors/blue");
+	}
+	if (Config::keyExist("colors/purple"))
+	{
+		colorPurple = Config::getColor("colors/purple");
+	}
 }
 
 QColor ChartWidget::genColor(int min, int max, int val)

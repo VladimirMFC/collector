@@ -6,17 +6,20 @@
 #include <QtGui/QKeyEvent>
 
 MainWindow::MainWindow(QWidget* parent)
-	: QMainWindow(parent), Log(), Config()
+	: QMainWindow(parent), Log(), Config(),
+	colCount(1)
 {
+	initConfigData();
+
 	QWidget *centralWidget = new QWidget(this);
 	setCentralWidget(centralWidget);
 
 	QGridLayout *layout = new QGridLayout(centralWidget);
 
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < 20; ++i)
 	{
 		ChartWidget *chart = new ChartWidget(QString("Host") + QString::number(i + 1), centralWidget);
-		layout->addWidget(chart);
+		layout->addWidget(chart, i / colCount, i % colCount);
 	}
 
 	centralWidget->setLayout(layout);
@@ -36,5 +39,13 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
 	else
 	{
 		QMainWindow::keyPressEvent(ke);
+	}
+}
+
+void MainWindow::initConfigData()
+{
+	if (Config::keyExist("layout/columns"))
+	{
+		colCount = Config::getInt("layout/columns");
 	}
 }

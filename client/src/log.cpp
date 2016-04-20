@@ -15,7 +15,7 @@ Log::~Log()
 {
 }
 
-bool Log::openLogByFileName(const QString& fileName)
+bool Log::openByFileName(const QString& fileName)
 {
 	QString logPath = QStandardPaths::locate(QStandardPaths::TempLocation, "", QStandardPaths::LocateDirectory);
 	if (logPath == QString())
@@ -23,10 +23,10 @@ bool Log::openLogByFileName(const QString& fileName)
 		return false;
 	}
 
-	return openLogByFilePath(logPath + fileName);
+	return openByFilePath(logPath + fileName);
 }
 
-bool Log::openLogByFilePath(const QString& filePath)
+bool Log::openByFilePath(const QString& filePath)
 {
 	file = new QFile(filePath);
 	if (!file->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text))
@@ -45,7 +45,7 @@ bool Log::openLogByFilePath(const QString& filePath)
 	return true;
 }
 
-void Log::closeLog()
+void Log::closeFile()
 {
 	writeFooter();
 
@@ -57,17 +57,17 @@ void Log::closeLog()
 	delete consoleStream;
 }
 
-void Log::logInfo(const QString& message)
+void Log::info(const QString& message)
 {
 	writeMessage(MT_INFO, message);
 }
 
-void Log::logWarn(const QString& message)
+void Log::warn(const QString& message)
 {
 	writeMessage(MT_WARN, message);
 }
 
-void Log::logCrit(const QString& message)
+void Log::crit(const QString& message)
 {
 	writeMessage(MT_CRIT, message);
 }

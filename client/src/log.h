@@ -11,13 +11,13 @@ public:
 	Log();
 	~Log();
 
-	static bool openLogByFileName(const QString& fileName);
-	static bool openLogByFilePath(const QString& filePath);
-	static void closeLog();
+	static bool openByFileName(const QString& fileName);
+	static bool openByFilePath(const QString& filePath);
+	static void closeFile();
 
-	static void logInfo(const QString& message);
-	static void logWarn(const QString& message);
-	static void logCrit(const QString& message);
+	static void info(const QString& message);
+	static void warn(const QString& message);
+	static void crit(const QString& message);
 
 private:
 	enum EMessageType

@@ -27,16 +27,16 @@ int main(int argc, char** argv)
 	bool logOpened;
 	if (parser.isSet(logFileOption))
 	{
-		logOpened = Log::openLogByFilePath(parser.value(logFileOption));
+		logOpened = Log::openByFilePath(parser.value(logFileOption));
 	}
 	else
 	{
-		logOpened = Log::openLogByFileName("clc.log");
+		logOpened = Log::openByFileName("clc.log");
 	}
 
 	if (!logOpened)
 	{
-		Log::logCrit("Cant open log file");
+		Log::crit("Cant open log file");
 
 		return EXIT_SUCCESS;
 	}
@@ -44,16 +44,16 @@ int main(int argc, char** argv)
 	bool configLoaded;
 	if (parser.isSet(configFileOption))
 	{
-		configLoaded = Config::loadConfigFromFileByPath(parser.value(configFileOption));
+		configLoaded = Config::loadFromFileByPath(parser.value(configFileOption));
 	}
 	else
 	{
-		configLoaded = Config::loadConfigFromFileByName("clc.conf");
+		configLoaded = Config::loadFromFileByName("clc.conf");
 	}
 
 	if (!configLoaded)
 	{
-		Log::logCrit("Cant load config file");
+		Log::crit("Cant load config file");
 
 		return EXIT_SUCCESS;
 	}
