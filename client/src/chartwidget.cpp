@@ -68,7 +68,10 @@ void ChartWidget::paintEvent(QPaintEvent*)
 	f = (timeList.size() < sumSize && timeList.size() != 0) ? f / timeList.size() : f / sumSize;
 
 	QString sst(name);
-	sst += QString("\nt ") + QString::number(f) + QString("ms");
+	sst += QString(": t ") + QString::number(f) + QString("ms\n");
+
+	QDateTime dt = QDateTime::currentDateTime();
+	sst += dt.toString("dd.MM hh:mm:ss");
 
 	painter.setPen(genColor(0, maxValue, f));
 	painter.setFont(QFont(fontName, height() / 3));
