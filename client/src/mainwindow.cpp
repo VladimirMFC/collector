@@ -44,8 +44,8 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
 
 void MainWindow::initConfigData()
 {
-	if (Config::keyExist("layout/columns"))
+	if (Config::keyExist("window/columns"))
 	{
-		colCount = Config::getInt("layout/columns");
+		colCount = Config::getInt("window/columns");
 	}
 }

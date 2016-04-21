@@ -58,8 +58,21 @@ int main(int argc, char** argv)
 		return EXIT_SUCCESS;
 	}
 
+	bool startFullscreen = true;
+	if (Config::keyExist("window/fullscreen"))
+	{
+		startFullscreen = Config::getBool("window/fullscreen");
+	}
+
 	MainWindow win;
-	win.showFullScreen();
+	if (startFullscreen)
+	{
+		win.showFullScreen();
+	}
+	else
+	{
+		win.showMaximized();
+	}
 
 	return app.exec();
 }
