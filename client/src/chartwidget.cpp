@@ -7,7 +7,7 @@
 
 ChartWidget::ChartWidget(const QString& name, QWidget* parent)
 	: QWidget(parent), Log(), Config(),
-	name(name), maxValue(100), sumSize(10), historySize(1000), fontName("DroidSansMonoForPowerline")
+	name(name), maxValue(100), sumSize(10), historySize(1000), fontName("DroidSansMonoForPowerline"), textRows(3), timeFormat("dd.MM hh:mm:ss")
 {
 	colorBlack = QColor(29, 31, 33);
 	colorWhite = QColor(197, 200, 198);
@@ -68,18 +68,48 @@ void ChartWidget::paintEvent(QPaintEvent*)
 	f = (timeList.size() < sumSize && timeList.size() != 0) ? f / timeList.size() : f / sumSize;
 
 	QString sst(name);
-	sst += QString(": t ") + QString::number(f) + QString("ms\n");
+	if (textRows > 2)
+	{
+		sst += QString("\n");
+	}
+	else
+	{
+		sst += QString(": ");
+	}
+
+	sst += QString("t(") + QString::number(sumSize) + QString(") ") + QString::number(f) + QString("ms");
+	if (textRows > 1)
+	{
+		sst += QString("\n");
+	}
 
 	QDateTime dt = QDateTime::currentDateTime();
-	sst += dt.toString("dd.MM hh:mm:ss");
+	sst += dt.toString(timeFormat);
+
+	int fontSize;
+	if (textRows > 2)
+	{
+		fontSize = height() / 5;
+	}
+	else
+	{
+		if (textRows > 1)
+		{
+			fontSize = height() / 3;
+		}
+		else
+		{
+			fontSize = height() / 2;
+		}
+	}
 
 	painter.setPen(genColor(0, maxValue, f));
-	painter.setFont(QFont(fontName, height() / 3));
+	painter.setFont(QFont(fontName, fontSize));
 
 	QRect trc;
-	painter.drawText(QRect(barWidth / 2, 0, width(), height()), Qt::AlignVCenter, sst, &trc);
+	painter.drawText(QRect(barWidth, 0, width(), height()), Qt::AlignVCenter, sst, &trc);
 
-	for (int i = 0, x = width() - 1; i < timeList.size() && x > trc.width() + (2 * barWidth) + 2; ++i, x -= barWidth + 1)
+	for (int i = 0, x = width() - 1; i < timeList.size() && x > trc.width() + (3 * barWidth); ++i, x -= barWidth + 1)
 	{
 		QRectF rc(QPointF(0.0, 1.0), QPointF((float)barWidth, (float)height() - ((float)height() / (float)maxValue * (float)timeList[i])));
 		if (rc.height() < 2)
@@ -99,14 +129,21 @@ void ChartWidget::paintEvent(QPaintEvent*)
 
 void ChartWidget::initConfigData()
 {
-	if (Config::keyExist("history"))
+	if (Config::keyExist("chart/history"))
 	{
-		historySize = Config::getInt("history");
+		historySize = Config::getInt("chart/history");
 	}
-
-	if (Config::keyExist("font"))
+	if (Config::keyExist("chart/font"))
 	{
-		fontName = Config::getString("font");
+		fontName = Config::getString("chart/font");
+	}
+	if (Config::keyExist("chart/textrows"))
+	{
+		textRows = Config::getInt("chart/textrows");
+	}
+	if (Config::keyExist("chart/timeformat"))
+	{
+		timeFormat = Config::getString("chart/timeformat");
 	}
 
 	if (Config::keyExist("colors/black"))

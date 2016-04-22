@@ -31,8 +31,9 @@ private:
 	int maxValue;
 	int sumSize;
 	int historySize;
-
 	QString fontName;
+	int textRows;
+	QString timeFormat;
 
 	QColor colorBlack;
 	QColor colorWhite;
