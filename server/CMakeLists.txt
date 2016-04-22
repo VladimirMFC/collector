@@ -11,11 +11,10 @@ endif()
 
 find_library(UCL ucl REQUIRED)
 find_package(Threads REQUIRED)
-find_package(PostgreSQL REQUIRED)
 
 set(TARGET_NAME ${PROJECT_NAME})
 
 aux_source_directory(./src SRC_LIST)
 add_executable(${TARGET_NAME} ${SRC_LIST})
 
-target_link_libraries(${TARGET_NAME} ${UCL} ${CMAKE_THREAD_LIBS_INIT} ${PostgreSQL_LIBRARIES})
+target_link_libraries(${TARGET_NAME} ${UCL} ${CMAKE_THREAD_LIBS_INIT})
