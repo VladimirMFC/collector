@@ -63,7 +63,7 @@ bool already_running(const char* pid_file)
 	return false;
 }
 
-void daemonize(const char* cmd)
+void daemonize()
 {
 	int fd0, fd1, fd2;
 	pid_t pid;
@@ -133,7 +133,7 @@ void daemonize(const char* cmd)
 	fd1 = dup(0);
 	fd2 = dup(0);
 
-	openlog(cmd, LOG_CONS, LOG_DAEMON);
+	//openlog(cmd, LOG_CONS, LOG_DAEMON);
 	if (fd0 != 0 || fd1 != 1 || fd2 != 2)
 	{
 		syslog(LOG_ERR, "Wrong file descriptors %d %d %d", fd0, fd1, fd2);
@@ -144,10 +144,11 @@ void daemonize(const char* cmd)
 void options_parse(int argc, char** argv)
 {
 	int ch = 0;
-	const char *opt_short = "hc:p:";
+	const char *opt_short = "hdc:p:";
 	struct option opt_long[] =
 	{
 		{"help",	no_argument,		NULL,	'h'},
+		{"daemon",	no_argument,		NULL,	'd'},
 		{"config",	required_argument,	NULL,	'c'},
 		{"pid",		required_argument,	NULL,	'p'},
 		{NULL,		0,			NULL,	0}
@@ -159,10 +160,15 @@ void options_parse(int argc, char** argv)
 		{
 		case 'h':
 			printf("Usage: %s [OPTIONS]\n", argv[0]);
+			printf("  -d, --daemon              run in daemon mode\n");
 			printf("  -c file, --config=file    path to config file\n");
 			printf("  -p file, --pid=file       path to PID file\n");
 			printf("  -h, --help                print this help and exit\n");
 			exit(0);
+			break;
+
+		case 'd':
+			daemonize();
 			break;
 
 		case 'c':
@@ -268,7 +274,7 @@ bool config_handler()
 int main(int argc, char** argv)
 {
 #ifdef NDEBUG
-	daemonize(strrchr(argv[0], '/') != NULL ? strrchr(argv[0], '/') + 1 : argv[0]);
+	openlog(strrchr(argv[0], '/') != NULL ? strrchr(argv[0], '/') + 1 : argv[0], LOG_CONS, LOG_DAEMON);
 #else
 	openlog(strrchr(argv[0], '/') != NULL ? strrchr(argv[0], '/') + 1 : argv[0], LOG_CONS | LOG_PERROR, LOG_DAEMON);
 #endif /* NDEBUG */
@@ -297,7 +303,6 @@ int main(int argc, char** argv)
 
 	config_close();
 	closelog();
-	//sleep(30);
 
 	return EXIT_SUCCESS;
 }
