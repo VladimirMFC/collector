@@ -16,7 +16,9 @@ MainWindow::MainWindow(QWidget* parent)
 
 	QGridLayout *layout = new QGridLayout(centralWidget);
 
-	for (int i = 0; i < 16; ++i)
+	int chartCount = 25;
+	chartCount += chartCount % colCount != 0 ? colCount - (chartCount % colCount) : 0;
+	for (int i = 0; i < chartCount; ++i)
 	{
 		ChartWidget *chart = new ChartWidget(QString("Host") + QString::number(i + 1), centralWidget);
 		layout->addWidget(chart, i / colCount, i % colCount);

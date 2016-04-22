@@ -77,7 +77,7 @@ void ChartWidget::paintEvent(QPaintEvent*)
 		sst += QString(": ");
 	}
 
-	sst += QString("t(") + QString::number(sumSize) + QString(") ") + QString::number(f) + QString("ms");
+	sst += QString("t(") + QString::number(sumSize) + QString(") = ") + QString::number(f) + QString("ms");
 	if (textRows > 1)
 	{
 		sst += QString("\n");

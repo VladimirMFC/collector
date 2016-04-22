@@ -5,6 +5,7 @@
 #include "config.h"
 
 #include <QtCore/QList>
+#include <QtGui/QPaintEvent>
 
 class ChartWidget
 	: public QWidget, public Log, public Config
@@ -19,7 +20,7 @@ public slots:
 	void updateData();
 
 protected:
-	void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
+	void paintEvent(QPaintEvent* event) override;
 
 private:
 	void initConfigData();
