@@ -63,7 +63,7 @@ bool already_running(const char* pid_file)
 	return false;
 }
 
-void daemonize()
+void daemonize(const char* cmd)
 {
 	int fd0, fd1, fd2;
 	pid_t pid;
@@ -133,7 +133,7 @@ void daemonize()
 	fd1 = dup(0);
 	fd2 = dup(0);
 
-	//openlog(cmd, LOG_CONS, LOG_DAEMON);
+	openlog(cmd, LOG_CONS, LOG_DAEMON);
 	if (fd0 != 0 || fd1 != 1 || fd2 != 2)
 	{
 		syslog(LOG_ERR, "Wrong file descriptors %d %d %d", fd0, fd1, fd2);
@@ -168,7 +168,7 @@ void options_parse(int argc, char** argv)
 			break;
 
 		case 'd':
-			daemonize();
+			daemonize(strrchr(argv[0], '/') != NULL ? strrchr(argv[0], '/') + 1 : argv[0]);
 			break;
 
 		case 'c':
@@ -273,11 +273,7 @@ bool config_handler()
 
 int main(int argc, char** argv)
 {
-#ifdef NDEBUG
-	openlog(strrchr(argv[0], '/') != NULL ? strrchr(argv[0], '/') + 1 : argv[0], LOG_CONS, LOG_DAEMON);
-#else
 	openlog(strrchr(argv[0], '/') != NULL ? strrchr(argv[0], '/') + 1 : argv[0], LOG_CONS | LOG_PERROR, LOG_DAEMON);
-#endif /* NDEBUG */
 
 	options_parse(argc, argv);
 
