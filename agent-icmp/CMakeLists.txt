@@ -1,4 +1,4 @@
-project(cld)
+project(cla-icmp)
 cmake_minimum_required(VERSION 3.1)
 
 set(CMAKE_C_STANDARD 11)

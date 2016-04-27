@@ -60,8 +60,6 @@ flags = [
 '/usr/include',
 '-isystem',
 '/usr/local/include',
-'-I',
-'../libutils/src',
 ]
 
 

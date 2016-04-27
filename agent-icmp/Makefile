@@ -10,4 +10,4 @@ clean:
 	rm -rfv temp
 
 run:	build
-	./temp/cld -c cld.conf -p temp/cld.pid
+	./temp/cla-icmp -c cla-icmp.conf -p temp/cla-icmp.pid
