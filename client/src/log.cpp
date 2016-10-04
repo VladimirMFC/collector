@@ -19,9 +19,7 @@ bool Log::openByFileName(const QString& fileName)
 {
 	QString logPath = QStandardPaths::locate(QStandardPaths::TempLocation, "", QStandardPaths::LocateDirectory);
 	if (logPath == QString())
-	{
 		return false;
-	}
 
 	return openByFilePath(logPath + fileName);
 }
@@ -30,9 +28,7 @@ bool Log::openByFilePath(const QString& filePath)
 {
 	file = new QFile(filePath);
 	if (!file->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text))
-	{
 		return false;
-	}
 
 	fileStream = new QTextStream(file);
 	fileStream->setCodec("UTF-8");

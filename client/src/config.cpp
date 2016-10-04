@@ -19,9 +19,7 @@ bool Config::loadFromFileByName(const QString& fileName)
 {
 	QString configPath = QStandardPaths::locate(QStandardPaths::ConfigLocation, fileName, QStandardPaths::LocateFile);
 	if (configPath == QString())
-	{
 		return false;
-	}
 
 	return loadFromFileByPath(configPath);
 }
@@ -30,16 +28,12 @@ bool Config::loadFromFileByPath(const QString& filePath)
 {
 	QFile loadFile(filePath);
 	if (!loadFile.open(QIODevice::ReadOnly))
-	{
 		return false;
-	}
 
 	QByteArray saveData = loadFile.readAll();
 	QJsonDocument jConfig(QJsonDocument::fromJson(saveData));
 	if (jConfig.isEmpty() || !jConfig.isObject())
-	{
 		return false;
-	}
 
 	config = jConfig.object();
 
@@ -78,9 +72,7 @@ QColor Config::getColor(const QString& name)
 	QJsonArray jArr = findKey(name).toArray();
 
 	if (jArr.size() == 3)
-	{
 		color.setRgb(jArr.at(0).toInt(), jArr.at(1).toInt(), jArr.at(2).toInt());
-	}
 
 	return color;
 }

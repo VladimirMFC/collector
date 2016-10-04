@@ -39,15 +39,11 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
 		close();
 	}
 	else
-	{
 		QMainWindow::keyPressEvent(ke);
-	}
 }
 
 void MainWindow::initConfigData()
 {
 	if (Config::keyExist("window/columns"))
-	{
 		colCount = Config::getInt("window/columns");
-	}
 }

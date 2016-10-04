@@ -43,9 +43,7 @@ void ChartWidget::updateData()
 	timeList.prepend(qrand() % maxValue);
 
 	if (timeList.size() > historySize)
-	{
 		timeList.removeLast();
-	}
 
 	update(rect());
 }
@@ -61,47 +59,31 @@ void ChartWidget::paintEvent(QPaintEvent*)
 
 	int f = 0;
 	for (int i = 0; i < sumSize && i < timeList.size(); ++i)
-	{
 		f += timeList[i];
-	}
 
 	f = (timeList.size() < sumSize && timeList.size() != 0) ? f / timeList.size() : f / sumSize;
 
 	QString sst(name);
 	if (textRows > 2)
-	{
 		sst += QString("\n");
-	}
 	else
-	{
 		sst += QString(": ");
-	}
 
 	sst += QString("t(") + QString::number(sumSize) + QString(") = ") + QString::number(f) + QString("ms");
 	if (textRows > 1)
-	{
 		sst += QString("\n");
-	}
 
 	QDateTime dt = QDateTime::currentDateTime();
 	sst += dt.toString(timeFormat);
 
 	int fontSize;
 	if (textRows > 2)
-	{
 		fontSize = height() / 5;
-	}
 	else
-	{
 		if (textRows > 1)
-		{
 			fontSize = height() / 3;
-		}
 		else
-		{
 			fontSize = height() / 2;
-		}
-	}
 
 	painter.setPen(genColor(0, maxValue, f));
 	painter.setFont(QFont(fontName, fontSize));
@@ -112,14 +94,13 @@ void ChartWidget::paintEvent(QPaintEvent*)
 	for (int i = 0, x = width() - 1; i < timeList.size() && x > trc.width() + (3 * barWidth); ++i, x -= barWidth + 1)
 	{
 		QRectF rc(QPointF(0.0, 1.0), QPointF((float)barWidth, (float)height() - ((float)height() / (float)maxValue * (float)timeList[i])));
+
 		if (rc.height() < 2)
-		{
 			rc.setHeight(2);
-		}
+
 		if (rc.height() > height() - 2)
-		{
 			rc.setHeight(height() - 2);
-		}
+
 		rc.moveBottom(height() - 1);
 		rc.moveRight(x);
 
@@ -130,58 +111,32 @@ void ChartWidget::paintEvent(QPaintEvent*)
 void ChartWidget::initConfigData()
 {
 	if (Config::keyExist("chart/history"))
-	{
 		historySize = Config::getInt("chart/history");
-	}
 	if (Config::keyExist("chart/font"))
-	{
 		fontName = Config::getString("chart/font");
-	}
 	if (Config::keyExist("chart/textrows"))
-	{
 		textRows = Config::getInt("chart/textrows");
-	}
 	if (Config::keyExist("chart/timeformat"))
-	{
 		timeFormat = Config::getString("chart/timeformat");
-	}
 
 	if (Config::keyExist("colors/black"))
-	{
 		colorBlack = Config::getColor("colors/black");
-	}
 	if (Config::keyExist("colors/white"))
-	{
 		colorWhite = Config::getColor("colors/white");
-	}
 	if (Config::keyExist("colors/red"))
-	{
 		colorRed = Config::getColor("colors/red");
-	}
 	if (Config::keyExist("colors/orange"))
-	{
 		colorOrange = Config::getColor("colors/orange");
-	}
 	if (Config::keyExist("colors/yellow"))
-	{
 		colorYellow = Config::getColor("colors/yellow");
-	}
 	if (Config::keyExist("colors/green"))
-	{
 		colorGreen = Config::getColor("colors/green");
-	}
 	if (Config::keyExist("colors/cyan"))
-	{
 		colorCyan = Config::getColor("colors/cyan");
-	}
 	if (Config::keyExist("colors/blue"))
-	{
 		colorBlue = Config::getColor("colors/blue");
-	}
 	if (Config::keyExist("colors/purple"))
-	{
 		colorPurple = Config::getColor("colors/purple");
-	}
 }
 
 QColor ChartWidget::genColor(int min, int max, int val)
@@ -190,27 +145,19 @@ QColor ChartWidget::genColor(int min, int max, int val)
 
 	cur += step;
 	if (val <= cur)
-	{
 		return colorBlue;
-	}
 
 	cur += step;
 	if (val <= cur)
-	{
 		return colorGreen;
-	}
 
 	cur += step;
 	if (val <= cur)
-	{
 		return colorYellow;
-	}
 
 	cur += step;
 	if (val <= cur)
-	{
 		return colorOrange;
-	}
 
 	return colorRed;
 }
